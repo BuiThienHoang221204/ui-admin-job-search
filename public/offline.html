@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#1F1F21" />
+    <title>Đang offline · Careelot Admin</title>
+    <style>
+      :root {
+        --paper: #fafafb;
+        --card: #ffffff;
+        --ink: #1f1f21;
+        --muted: #6b6b70;
+        --rule: #e6e6e9;
+        --accent: #4952ff;
+        --accent-ink: #ffffff;
+        color-scheme: light dark;
+      }
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --paper: #18181a;
+          --card: #1f1f21;
+          --ink: #f6f6f7;
+          --muted: #a9a9ae;
+          --rule: #3a3a3d;
+          --accent: #7189ff;
+          --accent-ink: #1f1f21;
+        }
+      }
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        min-height: 100vh;
+        display: grid;
+        place-items: center;
+        padding: 16px;
+        background: var(--paper);
+        color: var(--ink);
+        font: 15px/1.5 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+      }
+      main {
+        width: 100%;
+        max-width: 380px;
+        background: var(--card);
+        border: 1px solid var(--rule);
+        border-radius: 12px;
+        padding: 28px 24px;
+        text-align: center;
+      }
+      img { width: 48px; height: 48px; border-radius: 11px; }
+      h1 { font-size: 18px; margin: 16px 0 6px; }
+      p { margin: 0; color: var(--muted); font-size: 14px; }
+      button {
+        margin-top: 20px;
+        height: 40px;
+        padding: 0 18px;
+        border: 0;
+        border-radius: 8px;
+        background: var(--accent);
+        color: var(--accent-ink);
+        font: inherit;
+        font-weight: 600;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <img src="/icons/icon-192.png" alt="" />
+      <h1>Đang offline</h1>
+      <p>Không kết nối được tới khu quản trị Careelot. Kiểm tra mạng rồi thử lại.</p>
+      <button type="button" onclick="location.reload()">Thử lại</button>
+    </main>
+    <script>
+      // Có mạng lại thì tự tải lại, không bắt người dùng bấm.
+      window.addEventListener("online", () => location.reload());
+    </script>
+  </body>
+</html>
