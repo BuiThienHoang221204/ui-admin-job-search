@@ -8,14 +8,13 @@ import { Button } from "@/components/ui/button";
 import { Input, Label } from "@/components/ui/form";
 import { apiErrorMessage, apiErrorStatus } from "@/lib/axios";
 import { authService } from "@/services";
+import { safeNextPath } from "@/utils";
 
 function LoginForm() {
   const router = useRouter();
   const params = useSearchParams();
-  const rawNext = params.get("next") ?? "/";
-  // Chỉ nhận đường dẫn nội bộ, chặn open redirect kiểu `//evil.com`.
-  const next =
-    rawNext.startsWith("/") && !rawNext.startsWith("//") ? rawNext : "/";
+  // Chỉ nhận đường dẫn nội bộ, chặn open redirect kiểu `//evil.com` hay `/\evil.com`.
+  const next = safeNextPath(params.get("next"), "/");
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
