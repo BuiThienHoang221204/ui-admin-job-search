@@ -16,11 +16,12 @@ Cần backend chạy ở `BACKEND_URL` (mặc định `http://localhost:4000`). 
 
 ## Phân quyền
 
-Ba lớp, chỉ lớp cuối là bảo mật thật:
+Hai lớp, chỉ lớp cuối là bảo mật thật:
 
-1. `proxy.ts` — không có cookie thì đá về `/login`.
-2. `AdminGate` (`components/shell/admin-gate.tsx`) — hỏi `/auth/me`, không phải ADMIN thì hiện màn chặn, không gọi API nào khác.
-3. `RolesGuard` ở backend — APP_GUARD toàn cục, mọi route `@Roles('ADMIN')` trả 403 cho tài khoản thường.
+1. `AdminGate` (`components/shell/admin-gate.tsx`) — hỏi `/auth/me`, chặn render `{children}` (hiện skeleton) tới khi có kết quả, không phải ADMIN thì hiện màn chặn. Đây là lớp gate DUY NHẤT phía client — không có `middleware.ts`/`proxy.ts` nào chặn ở tầng điều hướng cả.
+2. `RolesGuard` ở backend — APP_GUARD toàn cục, mọi route `@Roles('ADMIN')` trả 403 cho tài khoản thường.
+
+Từng có `proxy.ts` chặn bằng cách kiểm cookie `aijob_token` có mặt hay không, nhưng backend đổi access token xuống còn sống **15 phút** (kèm refresh token 7 ngày, xem `server/CLAUDE.md`) khiến cookie đó gần như lúc nào cũng "thiếu" ở một lượt tải trang bình thường — `proxy.ts` sẽ đá về `/login` dù phiên vẫn còn hợp lệ (refresh token vẫn sống). Đã gỡ hẳn, theo đúng cách `ui-ai-job-search` xử lý (`middleware.ts` của app đó cũng đã gỡ cùng lý do).
 
 ## Trang
 

@@ -1,4 +1,4 @@
-import axios, { AxiosError } from "axios";
+import axios, { AxiosError, type InternalAxiosRequestConfig } from "axios";
 
 export const AUTH_COOKIE = "aijob_token";
 
@@ -41,6 +41,52 @@ export const api = axios.create({
     },
   },
 });
+
+/** Route KHÔNG thử lại sau 401: /auth/refresh tránh tự gọi lại vô tận, hai route kia 401 là câu trả lời ĐÚNG (sai mật khẩu) chứ không phải token hết hạn. */
+const NO_RETRY = ["/auth/refresh", "/auth/login", "/auth/register"];
+
+/** Lời refresh đang bay, dùng chung cho mọi request 401 cùng lúc - không gộp thì một trang bắn 6 request thì cả 6 cùng gọi /auth/refresh. */
+let refreshing: Promise<void> | null = null;
+
+const refreshOnce = (): Promise<void> => {
+  refreshing ??= api
+    .post("/auth/refresh")
+    .then(() => undefined)
+    .finally(() => {
+      refreshing = null;
+    });
+  return refreshing;
+};
+
+type RetriableConfig = InternalAxiosRequestConfig & { _retried?: boolean };
+
+/** Access hết hạn thì đổi lấy cái mới rồi chạy lại request, thay vì đá người dùng về đăng nhập giữa chừng. Chỉ thử lại MỘT lần (`_retried`) - refresh xong vẫn 401 nghĩa là phiên đã chết thật. */
+api.interceptors.response.use(
+  (response) => response,
+  async (error: unknown) => {
+    if (!(error instanceof AxiosError)) throw error;
+
+    const config = error.config as RetriableConfig | undefined;
+    const url = config?.url ?? "";
+    if (
+      error.response?.status !== 401 ||
+      !config ||
+      config._retried ||
+      NO_RETRY.some((path) => url.startsWith(path))
+    ) {
+      throw error;
+    }
+
+    config._retried = true;
+    try {
+      await refreshOnce();
+    } catch {
+      // Refresh cũng hỏng: phiên đã hết thật. Ném lỗi 401 GỐC ra ngoài để chỗ gọi xử lý như trước (vd QueryProvider đá về /login).
+      throw error;
+    }
+    return api(config);
+  },
+);
 
 /**
  * Rút thông báo lỗi mà backend gửi kèm.
