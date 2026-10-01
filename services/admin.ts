@@ -50,7 +50,7 @@ export const adminService = {
   // Chạy đồng bộ trên server; `all` tính lại cả kho nên có thể mất vài phút.
   backfillTaxonomy: (all: boolean) =>
     api
-      .post<BackfillResult>("/admin/jobs/backfill-taxonomy", null, {
+      .post<BackfillResult>("/admin/jobs/backfill-taxonomy", {}, {
         params: all ? { all: "true" } : {},
       })
       .then((r) => r.data),

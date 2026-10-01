@@ -13,7 +13,7 @@ export const matchingService = {
   // Trả về 0/0/0 khi MATCH_AI_AUTO=false, không phải lỗi.
   dispatchShortlist: (userId?: string) =>
     api
-      .post<ShortlistResult>("/matches/shortlist/dispatch", null, {
+      .post<ShortlistResult>("/matches/shortlist/dispatch", {}, {
         params: userId ? { userId } : {},
       })
       .then((r) => r.data),

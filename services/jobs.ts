@@ -16,7 +16,7 @@ export const jobsService = {
   // Gọi model ĐỒNG BỘ nên có thể mất vài chục giây; `force` bỏ qua cache theo sourceHash.
   extractRequirements: (id: string) =>
     api
-      .post<JobRequirements>(`/matches/requirements/${encodeURIComponent(id)}`, null, {
+      .post<JobRequirements>(`/matches/requirements/${encodeURIComponent(id)}`, {}, {
         params: { force: "true" },
         timeout: 180_000,
       })
