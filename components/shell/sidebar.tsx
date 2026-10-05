@@ -34,7 +34,7 @@ export function Sidebar() {
     <aside className="flex h-full w-(--sidebar-width) shrink-0 flex-col overflow-hidden border-r border-slate-200/80 bg-white transition-[width] duration-200 ease-out">
       <div className="flex h-[65px] shrink-0 items-center border-b border-slate-100 pr-3 pl-6 collapsed:justify-center collapsed:px-0">
         <div className="flex items-center gap-2 collapsed:hidden">
-          <BrandLogo className="h-[30.52px] w-[106.58px] shrink-0" />
+          <BrandLogo className="h-[33px] w-[132px] shrink-0" />
           <span className="rounded-md border border-amber-200 bg-amber-50 px-1.5 py-0.5 text-3xs font-semibold text-amber-900">
             Admin
           </span>

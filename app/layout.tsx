@@ -16,13 +16,13 @@ const googleSans = Google_Sans_Flex({
 });
 
 export const metadata: Metadata = {
-  title: { default: "Careelot Admin", template: "%s — Careelot Admin" },
+  title: { default: "Careelot Admin | Vận hành & Giám sát hệ thống", template: "%s — Careelot Admin" },
   description: "Bảng điều khiển vận hành Careelot: sức khoẻ AI, hàng đợi, quét tin và bảo trì dữ liệu.",
   robots: { index: false, follow: false },
   // iOS không đọc manifest để lấy icon và chế độ toàn màn hình khi "Thêm vào màn hình chính".
   appleWebApp: { capable: true, title: "CL Admin", statusBarStyle: "black-translucent" },
   // Khai báo icons là Next bỏ favicon tự sinh từ app/icon.svg, nên phải liệt kê lại.
-  icons: { icon: "/icon.svg", apple: "/icons/apple-touch-icon.png" },
+  icons: { icon: "/Careelot_Square.svg", apple: "/Careelot_Square.svg" },
 };
 
 // Xám đậm thay cho xanh thương hiệu: cửa sổ admin đã cài phân biệt được với app người dùng ngay trên thanh tác vụ.

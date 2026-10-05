@@ -52,7 +52,7 @@ function LoginForm() {
     <div className="flex min-h-screen items-center justify-center bg-slate-50 px-4 py-12">
       <div className="w-full max-w-sm space-y-6">
         <div className="flex flex-col items-center gap-3 text-center">
-          <BrandLogo className="h-[34px] w-[119px]" />
+          <BrandLogo className="h-[40px] w-[160px]" />
           <span className="inline-flex items-center gap-1.5 rounded-full border border-amber-200 bg-amber-50 px-2.5 py-1 text-2xs font-semibold text-amber-900">
             <ShieldCheck className="size-4" />
             Khu vực quản trị
