@@ -67,4 +67,6 @@ export interface JobsQuery extends PageQuery {
   source?: string;
   requirement?: RequirementFilter;
   canonicalOnly?: boolean;
+  from?: string;
+  to?: string;
 }

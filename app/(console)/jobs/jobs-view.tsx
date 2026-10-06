@@ -12,6 +12,7 @@ import { keys } from "@/lib/query-keys";
 import { jobsService } from "@/services";
 import type { RequirementFilter } from "@/types";
 import { PageHeader } from "@/components/shell/page-header";
+import { DateRangeFilter, initialRange, type RangeState } from "@/components/admin/date-range-filter";
 import { Alert } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
 import { EmptyState } from "@/components/ui/empty-state";
@@ -48,6 +49,7 @@ export function JobsView() {
   const [source, setSource] = useState("");
   const [requirement, setRequirement] = useState<"" | RequirementFilter>("");
   const [canonicalOnly, setCanonicalOnly] = useState(false);
+  const [range, setRange] = useState<RangeState>(() => initialRange("all"));
   const q = useDebounce(term.trim(), SEARCH_DEBOUNCE_MS);
 
   const sources = useApiQuery(keys.jobSources(), () => jobsService.sources({ limit: 100 }), {
@@ -60,6 +62,7 @@ export function JobsView() {
     source: source || undefined,
     requirement: requirement || undefined,
     canonicalOnly: canonicalOnly || undefined,
+    ...range.range,
   };
   // Bộ lọc đổi thì tự về trang đầu, tránh đứng ở trang 9 của một tập chỉ còn 2 trang.
   const [offset, setOffset] = usePagedFilters(filters);
@@ -82,6 +85,8 @@ export function JobsView() {
   return (
     <div className="space-y-5">
       <PageHeader title="Tin tuyển dụng" subtitle="Toàn bộ kho tin đã quét về" />
+
+      <DateRangeFilter value={range} onChange={setRange} />
 
       {page.error && <Alert tone="danger">{page.error}</Alert>}
 
