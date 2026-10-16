@@ -2,10 +2,9 @@ import { api } from "@/lib/axios";
 import type { AuthResult, AuthUser } from "@/types";
 
 /**
- * Đăng nhập và đăng ký vừa trả token trong body vừa khiến backend đặt cookie
- * httpOnly. Giao diện web KHÔNG dùng tới `accessToken` — nó đi cùng để script
- * và ứng dụng di động sau này có đường Bearer. Đừng lưu token vào localStorage:
- * làm vậy là vứt bỏ toàn bộ lợi ích của httpOnly.
+ * Đăng nhập và đăng ký chỉ trả `{ user }`; token nằm trong cookie httpOnly do
+ * backend đặt. Đừng tìm cách lưu token vào localStorage: làm vậy là vứt bỏ toàn
+ * bộ lợi ích của httpOnly.
  */
 export const authService = {
   login: (email: string, password: string) =>

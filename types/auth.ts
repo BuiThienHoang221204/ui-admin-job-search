@@ -13,7 +13,6 @@ export interface AuthUser {
 }
 
 export interface AuthResult {
-  accessToken: string;
   // Không có `role`: backend chỉ trả vai trò qua /auth/me.
   user: Omit<AuthUser, "role">;
 }
