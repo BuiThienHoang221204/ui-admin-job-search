@@ -147,7 +147,7 @@ export function QueuesView() {
 
       <SectionCard
         title="Từng hàng đợi"
-        description={rows ? `${rows.length} hàng · đổi cấu hình ăn sau ≤30 giây` : undefined}
+        description={rows ? `${rows.length} hàng · đổi cấu hình có hiệu lực sau khi khởi động lại worker` : undefined}
         contentClassName="p-0"
         actions={
           <Button

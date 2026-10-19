@@ -44,7 +44,7 @@ export function QueueConfigModal({
         serial,
         note: note.trim() || null,
       });
-      toast.success(`Đã lưu cấu hình ${row.name}. Worker nhận giá trị mới trong vòng 30 giây.`);
+      toast.success(`Đã lưu cấu hình ${row.name}. Có hiệu lực sau khi khởi động lại worker.`);
       onSaved();
     } catch (err) {
       setError(apiErrorMessage(err, "Không lưu được cấu hình"));
