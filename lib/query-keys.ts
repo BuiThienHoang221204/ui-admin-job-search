@@ -21,4 +21,5 @@ export const keys = {
   dictionaryList: (query: unknown) => ["admin", "dictionary", "list", query] as const,
   dictionarySkill: (id: string) => ["admin", "dictionary", "skill", id] as const,
   dictionarySummary: () => ["admin", "dictionary", "summary"] as const,
+  modelPoolHealth: () => ["admin", "ai", "models", "health"] as const,
 };

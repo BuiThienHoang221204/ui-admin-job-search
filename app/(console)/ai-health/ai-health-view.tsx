@@ -15,8 +15,15 @@ import { Skeleton, SkeletonPage } from "@/components/ui/skeleton";
 import { Tabs } from "@/components/ui/tabs";
 import { HealthStats } from "./health-stats";
 import { ModelTable, PurposeTable } from "./health-tables";
+import { ModelPoolTab } from "./model-pool-tab";
+
+const VIEW_TABS = [
+  { value: "pool", label: "Bể model & cầu dao" },
+  { value: "history", label: "Lịch sử lời gọi" },
+];
 
 export function AiHealthView() {
+  const [view, setView] = useState("pool");
   const [days, setDays] = useState(1);
 
   // `days` nằm trong key nên đổi tab là một truy vấn khác, quay lại mốc cũ thì dùng cache.
@@ -31,8 +38,21 @@ export function AiHealthView() {
     <div className="space-y-5">
       <PageHeader
         title="Sức khoẻ AI"
-        subtitle="Tỷ lệ thành công, độ trễ và nguyên nhân hỏng của lời gọi model"
-        actions={
+        subtitle="Bể model đang dùng, model bị cách ly, và tỷ lệ thành công của lời gọi model"
+      />
+
+      <Tabs tabs={VIEW_TABS} value={view} onChange={setView} className="max-w-md" />
+
+      {view === "pool" && <ModelPoolTab />}
+
+      {view === "history" && (
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <Tabs
+            tabs={RANGE_TABS}
+            value={String(days)}
+            onChange={(value) => setDays(Number(value))}
+            className="max-w-sm"
+          />
           <Button
             variant="outline"
             size="sm"
@@ -42,42 +62,36 @@ export function AiHealthView() {
             <ArrowsClockwise className="size-4.5" />
             Tải lại
           </Button>
-        }
-      />
-
-      <Tabs
-        tabs={RANGE_TABS}
-        value={String(days)}
-        onChange={(value) => setDays(Number(value))}
-        className="max-w-sm"
-      />
-
-      {health.error ? (
-        <Alert tone="danger">{health.error}</Alert>
-      ) : !data ? (
-        <SkeletonPage>
-          <Skeleton className="h-24" />
-          <Skeleton className="h-44" />
-          <Skeleton className="h-64" />
-        </SkeletonPage>
-      ) : data.total === 0 ? (
-        <div className="rounded-lg border border-slate-200 bg-white">
-          <EmptyState
-            title="Chưa có lời gọi model nào trong khoảng này"
-            description="Chọn khoảng thời gian rộng hơn."
-          />
-        </div>
-      ) : (
-        <div className="space-y-5">
-          <HealthStats health={data} />
-          <FailureKindsCard failures={data.failures} />
-          <PurposeTable rows={data.byPurpose} />
-          <ModelTable rows={data.byModel} />
-          <p className="text-xs text-slate-500">
-            Độ trễ đọc theo phân vị vì đuôi rất dài · tính trên tối đa 5.000 lời gọi gần nhất.
-          </p>
         </div>
       )}
+
+      {view === "history" &&
+        (health.error ? (
+          <Alert tone="danger">{health.error}</Alert>
+        ) : !data ? (
+          <SkeletonPage>
+            <Skeleton className="h-24" />
+            <Skeleton className="h-44" />
+            <Skeleton className="h-64" />
+          </SkeletonPage>
+        ) : data.total === 0 ? (
+          <div className="rounded-lg border border-slate-200 bg-white">
+            <EmptyState
+              title="Chưa có lời gọi model nào trong khoảng này"
+              description="Chọn khoảng thời gian rộng hơn."
+            />
+          </div>
+        ) : (
+          <div className="space-y-5">
+            <HealthStats health={data} />
+            <FailureKindsCard failures={data.failures} />
+            <PurposeTable rows={data.byPurpose} />
+            <ModelTable rows={data.byModel} />
+            <p className="text-xs text-slate-500">
+              Độ trễ đọc theo phân vị vì đuôi rất dài · tính trên tối đa 5.000 lời gọi gần nhất.
+            </p>
+          </div>
+        ))}
     </div>
   );
 }

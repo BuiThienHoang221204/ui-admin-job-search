@@ -165,3 +165,24 @@ export interface Overview {
   portals: Array<{ portal: string; status: WorkStatus; jobsNew: number; error: string | null; createdAt: string }>;
   attention: AttentionItem[];
 }
+
+export interface ModelHealthInfo {
+  modelId: string;
+  healthy: boolean;
+  latencyMs: number;
+  lastCheckedAt: number;
+  consecutiveFailures: number;
+  cooldownUntil?: number;
+  error?: string;
+}
+
+export interface ModelPoolStatus {
+  mainPool: string[];
+  fastPool: string[];
+  mainProviders: string[];
+  fastProviders: string[];
+  cooldownMs: number;
+  models: ModelHealthInfo[];
+  isRefreshing: boolean;
+  lastRefreshedAt: number;
+}

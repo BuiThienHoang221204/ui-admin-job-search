@@ -7,6 +7,7 @@ import type {
   AiHealth,
   AiUsage,
   BackfillResult,
+  ModelPoolStatus,
   Overview,
   PageQuery,
   Paginated,
@@ -29,6 +30,12 @@ export const adminService = {
     api
       .get<AiHealth>("/admin/ai-health", { params: { days } })
       .then((r) => r.data),
+
+  modelPoolHealth: () =>
+    api.get<ModelPoolStatus>("/admin/ai/models/health").then((r) => r.data),
+
+  triggerModelHealthCheck: () =>
+    api.post<ModelPoolStatus>("/admin/ai/models/health-check").then((r) => r.data),
 
   aiFailures: (query: AiFailuresQuery = {}) =>
     api
