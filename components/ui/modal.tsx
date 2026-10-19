@@ -21,11 +21,11 @@ export function Modal({ open, onClose, title, children, className }: ModalProps)
     };
     if (open) {
       document.addEventListener("keydown", handleEscape);
-      document.body.style.overflow = "hidden";
+      document.documentElement.style.overflow = "hidden";
     }
     return () => {
       document.removeEventListener("keydown", handleEscape);
-      document.body.style.overflow = "";
+      document.documentElement.style.overflow = "";
     };
   }, [open, onClose]);
 
@@ -34,7 +34,7 @@ export function Modal({ open, onClose, title, children, className }: ModalProps)
   return (
     <div
       ref={overlayRef}
-      className="fixed inset-0 z-50 flex items-center justify-center bg-slab/60 p-4"
+      className="fixed inset-0 z-50 m-0 flex items-center justify-center bg-slab/60 p-4"
       onClick={(e) => {
         if (e.target === overlayRef.current) onClose();
       }}
