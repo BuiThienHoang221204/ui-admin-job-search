@@ -96,6 +96,20 @@ export function ModelPoolTab() {
   const rows = [...new Set([...status.mainPool, ...status.fastPool])];
   const coolingCount = status.models.filter((m) => (m.cooldownUntil ?? 0) > now).length;
   const cooldownMinutes = Math.round(status.cooldownMs / 60_000);
+  const usable = (modelId: string) =>
+    badgeOf(models.get(modelId), now).variant === "success";
+  const chains = [
+    {
+      title: "Bể main — tác vụ chạy nền",
+      providers: status.mainProviders,
+      pool: status.mainPool.filter(usable),
+    },
+    {
+      title: "Bể fast — người dùng đang chờ",
+      providers: status.fastProviders,
+      pool: status.fastPool.filter(usable),
+    },
+  ];
 
   const metrics: Metric[] = [
     { label: "Model đang theo dõi", value: formatCount(status.models.length) },
@@ -143,9 +157,34 @@ export function ModelPoolTab() {
 
       <MetricStrip items={metrics} />
 
+      <div className="grid gap-5 lg:grid-cols-2">
+        {chains.map((chain) => (
+          <SectionCard
+            key={chain.title}
+            title={chain.title}
+            description={`Lõi: ${chain.providers.join(" → ")}`}
+          >
+            {chain.pool.length === 0 ? (
+              <p className="text-sm text-slate-500">
+                Chưa có model khả dụng. Bấm &quot;Kiểm tra ngay&quot; để kiểm tra lại.
+              </p>
+            ) : (
+              <ol className="flex flex-wrap items-center gap-x-1.5 gap-y-2 font-mono text-xs">
+                {chain.pool.map((modelId, index) => (
+                  <li key={modelId} className="flex items-center gap-1.5">
+                    {index > 0 && <span className="text-slate-400">→</span>}
+                    <Badge variant="success">{modelId}</Badge>
+                  </li>
+                ))}
+              </ol>
+            )}
+          </SectionCard>
+        ))}
+      </div>
+
       <SectionCard
         title="Thứ tự model trong chuỗi"
-        description={`Lõi bể main: ${status.mainProviders.join(" → ")} · Lõi bể fast: ${status.fastProviders.join(" → ")}`}
+        description={'Vị trí của từng model trong mỗi bể; "—" là model không thuộc bể đó.'}
         contentClassName="p-0"
       >
         <div className="overflow-x-auto">
