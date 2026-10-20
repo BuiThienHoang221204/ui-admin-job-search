@@ -207,14 +207,14 @@ export function ModelPoolTab() {
                 const badge = badgeOf(model, now);
                 return (
                   <TableRow key={modelId}>
-                    <TableCell className="font-mono text-xs">{modelId}</TableCell>
+                    <TableCell className="font-mono text-xs whitespace-nowrap">{modelId}</TableCell>
                     <TableCell className="text-center font-mono text-xs">
                       {positionIn(status.mainPool, modelId)}
                     </TableCell>
                     <TableCell className="text-center font-mono text-xs">
                       {positionIn(status.fastPool, modelId)}
                     </TableCell>
-                    <TableCell>
+                    <TableCell className="whitespace-nowrap">
                       <Badge variant={badge.variant} dot>
                         {badge.label}
                       </Badge>
