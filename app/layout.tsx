@@ -25,9 +25,11 @@ export const metadata: Metadata = {
   icons: { icon: "/Careelot_Square.svg", apple: "/Careelot_Square.svg" },
 };
 
-// Xám đậm thay cho xanh thương hiệu: cửa sổ admin đã cài phân biệt được với app người dùng ngay trên thanh tác vụ.
 export const viewport: Viewport = {
-  themeColor: "#1F1F21",
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#FFFFFF" },
+    { media: "(prefers-color-scheme: dark)", color: "#1F1F21" },
+  ],
 };
 
 export default function RootLayout({

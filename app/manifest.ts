@@ -12,7 +12,7 @@ export default function manifest(): MetadataRoute.Manifest {
     display: "standalone",
     lang: "vi",
     background_color: "#FAFAFB",
-    theme_color: "#1F1F21",
+    theme_color: "#FAFAFB",
     icons: [
       { src: "/Careelot_Square.svg", sizes: "192x192", type: "image/svg+xml", purpose: "any" },
       { src: "/Careelot_Square.svg", sizes: "512x512", type: "image/svg+xml", purpose: "any" },
