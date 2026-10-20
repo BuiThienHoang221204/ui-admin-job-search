@@ -13,6 +13,7 @@ import { StackedBars, type BarSeries } from "@/components/admin/stacked-bars";
 import { purposeLabel } from "@/constants/constants";
 import { Alert } from "@/components/ui/alert";
 import { EmptyHint } from "@/components/ui/empty-state";
+import { Pagination } from "@/components/ui/pagination";
 import { SectionCard } from "@/components/ui/section-card";
 import { Skeleton, SkeletonPage } from "@/components/ui/skeleton";
 import {
@@ -121,10 +122,12 @@ export function AiUsageView() {
           <div className="grid gap-5 2xl:grid-cols-2 *:min-w-0">
             <UsageTable
               title="Theo model"
+              noun="model"
               rows={data.byModel.map((row) => ({ key: row.modelId, label: <span className="font-mono text-xs">{row.modelId}</span>, row }))}
             />
             <UsageTable
               title="Theo tác vụ"
+              noun="tác vụ"
               rows={data.byPurpose.map((row) => ({
                 key: row.purpose,
                 label: (
@@ -140,6 +143,7 @@ export function AiUsageView() {
 
           <UsageTable
             title="10 tài khoản tốn nhiều token nhất"
+            noun="tài khoản"
             rows={data.topUsers.map((row) => ({
               key: row.userId,
               label: (
@@ -160,11 +164,22 @@ export function AiUsageView() {
 function UsageTable({
   title,
   rows,
+  noun = "mục",
+  pageSize = 10,
 }: {
   title: string;
   rows: Array<{ key: string; label: ReactNode; row: UsageRow }>;
+  noun?: string;
+  pageSize?: number;
 }) {
+  const [offset, setOffset] = useState(0);
   const max = Math.max(1, ...rows.map(({ row }) => row.totalTokens));
+  const safeOffset = Math.min(
+    offset,
+    Math.max(0, Math.floor((rows.length - 1) / pageSize) * pageSize),
+  );
+  const visibleRows = rows.slice(safeOffset, safeOffset + pageSize);
+
   return (
     <SectionCard title={title} contentClassName="p-0">
       {rows.length === 0 ? (
@@ -172,42 +187,51 @@ function UsageTable({
           <EmptyHint>Chưa có lời gọi nào trong khoảng này.</EmptyHint>
         </div>
       ) : (
-        <div className="overflow-x-auto">
-          <Table>
-            <TableHeader>
-              <TableRow className="hover:bg-transparent">
-                <TableHead />
-                <TableHead className="text-right">Lời gọi</TableHead>
-                <TableHead className="text-right">Vào</TableHead>
-                <TableHead className="text-right">Ra</TableHead>
-                <TableHead className="min-w-40">Tổng</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {rows.map(({ key, label, row }) => (
-                <TableRow key={key}>
-                  <TableCell className="max-w-56">{label}</TableCell>
-                  <TableCell className="text-right font-mono text-xs tabular-nums">
-                    {formatCount(row.calls)}
-                    {row.failed > 0 && <span className="block text-2xs text-rose-600">{formatCount(row.failed)} hỏng</span>}
-                  </TableCell>
-                  <TableCell className="text-right font-mono text-xs tabular-nums">{formatCount(row.inputTokens)}</TableCell>
-                  <TableCell className="text-right font-mono text-xs tabular-nums">{formatCount(row.outputTokens)}</TableCell>
-                  <TableCell>
-                    <div className="flex items-center gap-2">
-                      <div className="h-1.5 w-20 overflow-hidden rounded-full bg-slate-100">
-                        <div className="h-full rounded-full bg-primary-500" style={{ width: `${(row.totalTokens / max) * 100}%` }} />
-                      </div>
-                      <span className="font-mono text-xs font-semibold text-slate-900 tabular-nums">
-                        {formatCount(row.totalTokens)}
-                      </span>
-                    </div>
-                  </TableCell>
+        <>
+          <div className="overflow-x-auto">
+            <Table>
+              <TableHeader>
+                <TableRow className="hover:bg-transparent">
+                  <TableHead />
+                  <TableHead className="text-right">Lời gọi</TableHead>
+                  <TableHead className="text-right">Vào</TableHead>
+                  <TableHead className="text-right">Ra</TableHead>
+                  <TableHead className="min-w-40">Tổng</TableHead>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </div>
+              </TableHeader>
+              <TableBody>
+                {visibleRows.map(({ key, label, row }) => (
+                  <TableRow key={key}>
+                    <TableCell className="max-w-56">{label}</TableCell>
+                    <TableCell className="text-right font-mono text-xs tabular-nums">
+                      {formatCount(row.calls)}
+                      {row.failed > 0 && <span className="block text-2xs text-rose-600">{formatCount(row.failed)} hỏng</span>}
+                    </TableCell>
+                    <TableCell className="text-right font-mono text-xs tabular-nums">{formatCount(row.inputTokens)}</TableCell>
+                    <TableCell className="text-right font-mono text-xs tabular-nums">{formatCount(row.outputTokens)}</TableCell>
+                    <TableCell>
+                      <div className="flex items-center gap-2">
+                        <div className="h-1.5 w-20 overflow-hidden rounded-full bg-slate-100">
+                          <div className="h-full rounded-full bg-primary-500" style={{ width: `${(row.totalTokens / max) * 100}%` }} />
+                        </div>
+                        <span className="font-mono text-xs font-semibold text-slate-900 tabular-nums">
+                          {formatCount(row.totalTokens)}
+                        </span>
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
+          <Pagination
+            offset={safeOffset}
+            limit={pageSize}
+            total={rows.length}
+            onOffsetChange={setOffset}
+            noun={noun}
+          />
+        </>
       )}
     </SectionCard>
   );
