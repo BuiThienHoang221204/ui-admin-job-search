@@ -21,4 +21,7 @@ export const jobsService = {
         timeout: 180_000,
       })
       .then((r) => r.data),
+
+  reExtract: (jobIds: string[]) =>
+    api.post<{ queued: number; message: string }>("/admin/jobs/re-extract", { jobIds }).then((r) => r.data),
 };
