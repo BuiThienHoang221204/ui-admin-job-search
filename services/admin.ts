@@ -51,6 +51,9 @@ export const adminService = {
   scrapeNow: () =>
     api.post<ScrapeNowResult>("/admin/scrape/run-now").then((r) => r.data),
 
+  scrapePortalNow: (portal: string) =>
+    api.post(`/admin/scrape/run-now/${encodeURIComponent(portal)}`),
+
   reconcileNow: () =>
     api.post<ReconcileResult>("/admin/reconcile/run-now").then((r) => r.data),
 

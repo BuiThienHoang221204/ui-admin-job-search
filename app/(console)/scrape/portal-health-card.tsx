@@ -1,10 +1,10 @@
 "use client";
 
 import { Fragment, useState } from "react";
-import { ArrowsClockwise, CaretDown } from "@phosphor-icons/react/ssr";
+import { ArrowsClockwise, CaretDown, Play } from "@phosphor-icons/react/ssr";
 import { useQueryClient } from "@tanstack/react-query";
 import { apiErrorMessage } from "@/lib/axios";
-import { scraperService } from "@/services";
+import { adminService, scraperService } from "@/services";
 import type { PortalHealth } from "@/types";
 import { WORK_STATUS } from "@/constants/constants";
 import { Sparkline } from "@/components/admin/sparkline";
@@ -35,6 +35,7 @@ export function PortalHealthCard({
   const queryClient = useQueryClient();
   const [open, setOpen] = useState<string | null>(null);
   const [reloading, setReloading] = useState(false);
+  const [scanning, setScanning] = useState<string | null>(null);
 
   const reload = async () => {
     setReloading(true);
@@ -46,6 +47,19 @@ export function PortalHealthCard({
       toast.danger(apiErrorMessage(err, "Không nạp lại được portal"));
     } finally {
       setReloading(false);
+    }
+  };
+
+  const scan = async (portal: string) => {
+    setScanning(portal);
+    try {
+      await adminService.scrapePortalNow(portal);
+      toast.success(`Đã xếp hàng quét ${portal}. Mất vài phút; bảng tự làm mới.`);
+      await queryClient.invalidateQueries({ queryKey: ["admin", "scrape"] });
+    } catch (err) {
+      toast.danger(apiErrorMessage(err, `Không quét được ${portal}`));
+    } finally {
+      setScanning(null);
     }
   };
 
@@ -81,7 +95,7 @@ export function PortalHealthCard({
                 <th className="px-2 py-2 text-right font-medium">Tin mới</th>
                 <th className="w-36 px-2 py-2 font-medium">Xu hướng</th>
                 <th className="px-2 py-2 font-medium">Hỏng</th>
-                <th className="w-10 px-4 py-2" />
+                <th className="w-32 px-4 py-2" />
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100">
@@ -153,7 +167,23 @@ export function PortalHealthCard({
                         </span>
                       </td>
                       <td className="px-4 py-2.5 text-slate-400">
-                        <CaretDown className={cn("size-4 transition-transform", expanded && "rotate-180")} />
+                        <span className="flex items-center justify-end gap-2">
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            disabled={!portal.enabled}
+                            loading={scanning === portal.key}
+                            title={`Quét riêng ${portal.key} ngay (lượt hệ thống như cron)`}
+                            onClick={(event) => {
+                              event.stopPropagation();
+                              void scan(portal.key);
+                            }}
+                          >
+                            <Play className="size-3.5" />
+                            Quét
+                          </Button>
+                          <CaretDown className={cn("size-4 transition-transform", expanded && "rotate-180")} />
+                        </span>
                       </td>
                     </tr>
                     {expanded && (
