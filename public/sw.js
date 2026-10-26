@@ -1,6 +1,6 @@
 // Service worker Careelot Admin: chỉ cache tệp tĩnh, KHÔNG BAO GIỜ đụng /api (dữ liệu phải mới và đúng phiên đăng nhập).
 // Đổi VERSION mỗi khi sửa file này hoặc offline.html để máy người dùng bỏ cache cũ.
-const VERSION = "careelot-admin-v1";
+const VERSION = "careelot-admin-v2";
 const OFFLINE_URL = "/offline.html";
 const PRECACHE = [OFFLINE_URL, "/icons/icon-192.png", "/icons/icon-512.png"];
 

@@ -12,8 +12,12 @@
         --ink: #1f1f21;
         --muted: #6b6b70;
         --rule: #e6e6e9;
-        --accent: #4952ff;
+        --accent: #2823d5;
         --accent-ink: #ffffff;
+        --tile: #f1f1ff;
+        --glow: rgba(40, 35, 213, 0.07);
+        --dot: #e5484d;
+        --dot-ring: rgba(229, 72, 77, 0.18);
         color-scheme: light dark;
       }
       @media (prefers-color-scheme: dark) {
@@ -22,9 +26,12 @@
           --card: #1f1f21;
           --ink: #f6f6f7;
           --muted: #a9a9ae;
-          --rule: #3a3a3d;
+          --rule: #333336;
           --accent: #7189ff;
-          --accent-ink: #1f1f21;
+          --accent-ink: #18181a;
+          --tile: #ffffff;
+          --glow: rgba(113, 137, 255, 0.1);
+          --dot-ring: rgba(229, 72, 77, 0.25);
         }
       }
       * { box-sizing: border-box; }
@@ -34,42 +41,76 @@
         display: grid;
         place-items: center;
         padding: 16px;
-        background: var(--paper);
+        background: radial-gradient(600px 300px at 50% 0%, var(--glow), transparent 70%), var(--paper);
         color: var(--ink);
         font: 15px/1.5 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
       }
       main {
         width: 100%;
-        max-width: 380px;
+        max-width: 400px;
         background: var(--card);
         border: 1px solid var(--rule);
-        border-radius: 12px;
-        padding: 28px 24px;
+        border-radius: 16px;
+        padding: 32px 28px 26px;
         text-align: center;
       }
-      img { width: 48px; height: 48px; border-radius: 11px; }
-      h1 { font-size: 18px; margin: 16px 0 6px; }
+      .logo { width: 64px; height: 64px; margin: 0 auto; padding: 10px; border-radius: 18px; background: var(--tile); }
+      .logo svg { width: 100%; height: 100%; display: block; }
+      .brand { margin-top: 10px; font-size: 13px; font-weight: 600; letter-spacing: 0.02em; color: var(--muted); }
+      .status {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        margin-top: 20px;
+        padding: 4px 12px 4px 10px;
+        border-radius: 999px;
+        border: 1px solid var(--rule);
+        font-size: 12.5px;
+        font-weight: 600;
+      }
+      .status i { width: 8px; height: 8px; border-radius: 50%; background: var(--dot); box-shadow: 0 0 0 4px var(--dot-ring); }
+      h1 { font-size: 20px; line-height: 1.3; margin: 14px 0 6px; }
       p { margin: 0; color: var(--muted); font-size: 14px; }
       button {
-        margin-top: 20px;
-        height: 40px;
-        padding: 0 18px;
+        margin-top: 22px;
+        width: 100%;
+        height: 42px;
         border: 0;
-        border-radius: 8px;
+        border-radius: 10px;
         background: var(--accent);
         color: var(--accent-ink);
         font: inherit;
         font-weight: 600;
         cursor: pointer;
       }
+      .hint { margin-top: 12px; font-size: 12.5px; display: inline-flex; align-items: center; gap: 6px; }
+      .spin { width: 12px; height: 12px; border: 2px solid var(--rule); border-top-color: var(--accent); border-radius: 50%; animation: spin 1s linear infinite; }
+      @keyframes spin { to { transform: rotate(360deg); } }
+      @media (prefers-reduced-motion: reduce) { .spin { animation: none; } }
     </style>
   </head>
   <body>
     <main>
-      <img src="/icons/icon-192.png" alt="" />
-      <h1>Đang offline</h1>
-      <p>Không kết nối được tới khu quản trị Careelot. Kiểm tra mạng rồi thử lại.</p>
+      <div class="logo"><svg viewBox="0 0 1000 1000" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Careelot">
+<path fill-rule="evenodd" clip-rule="evenodd" d="M490.802 999.917L460.507 962.958C458.459 960.49 457.606 957.243 458.17 954.087L481.589 821.774C482.434 816.998 486.586 813.517 491.436 813.517H508.564C513.415 813.517 517.566 816.998 518.411 821.774L541.83 954.09C542.394 957.223 541.538 960.448 539.493 962.888L509.173 999.918C606.283 998.17 696.634 968.737 772.667 919.177C777.62 915.948 778.551 909.121 774.75 904.593L644.507 749.449C641.394 745.741 636.081 744.813 631.811 747.095C602.809 762.598 570.76 773.145 536.793 777.604C533.482 778.039 530.565 780.03 529.03 782.996L520.768 798.956C519.05 802.275 515.625 804.359 511.887 804.359H488.113C484.376 804.359 480.95 802.275 479.232 798.956L470.971 782.996C469.436 780.03 466.519 778.039 463.207 777.604C429.437 773.171 397.562 762.72 368.693 747.364C364.425 745.094 359.123 746.025 356.016 749.727L225.74 904.911C221.935 909.443 222.871 916.276 227.832 919.501C303.755 968.861 393.913 998.169 490.802 999.917Z" fill="#2823D5"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M760.754 75.708C761.632 75.136 761.638 73.8349 760.744 73.2875C684.826 26.798 595.543 0 500 0C223.858 0 0 223.858 0 500C0 631.841 51.0275 751.763 134.41 841.095C138.447 845.419 145.337 845.157 149.141 840.626L279.375 685.491C282.487 681.784 282.482 676.393 279.497 672.583C242.223 625.027 220 565.109 220 500C220 345.36 345.36 220 500 220C534.229 220 567.023 226.142 597.34 237.384C603.365 239.618 610.056 235.934 612.348 229.932C614.175 225.149 616.561 220.571 619.475 216.298L620.185 215.278C627.594 204.837 637.873 196.781 649.764 192.078L704.392 170.462L704.511 170.415C706.609 169.59 708.506 168.347 710.085 166.771C711.664 165.197 712.892 163.323 713.702 161.272L713.726 161.213L713.75 161.153L735.419 106.659C740.312 94.3493 748.786 83.8126 759.722 76.3945L760.754 75.708Z" fill="#2823D5"/>
+<path d="M871.543 227.972L867.168 226.253C857.433 222.413 848.591 216.622 841.189 209.238C833.786 201.854 827.982 193.034 824.133 183.323L802.463 128.829C802.016 127.699 801.238 126.73 800.232 126.047C799.225 125.365 798.036 125 796.818 125C795.601 125 794.411 125.365 793.404 126.047C792.398 126.73 791.62 127.699 791.173 128.829L769.503 183.323C765.663 193.039 759.862 201.865 752.459 209.25L751.761 209.937C744.502 216.995 735.904 222.542 726.468 226.253L671.839 247.869C670.707 248.315 669.735 249.09 669.051 250.094C668.366 251.099 668 252.285 668 253.5C668 254.714 668.366 255.901 669.051 256.905C669.735 257.909 670.707 258.684 671.839 259.13L726.468 280.747C735.923 284.464 744.536 290.027 751.804 297.104C751.933 297.23 752.062 297.356 752.19 297.483C752.28 297.572 752.37 297.66 752.459 297.75C759.862 305.135 765.663 313.96 769.503 323.676L791.173 378.171C791.62 379.3 792.398 380.269 793.404 380.952C794.348 381.592 795.453 381.953 796.59 381.996L796.818 382C797.959 382 799.076 381.678 800.04 381.076L800.232 380.952C801.175 380.312 801.917 379.42 802.375 378.38L802.463 378.171L824.133 323.676C827.862 314.269 833.426 305.697 840.5 298.458L841.189 297.761C848.591 290.377 857.433 284.586 867.168 280.747L922.161 259.13C923.222 258.712 924.143 258.005 924.817 257.09L924.949 256.905C925.634 255.901 926 254.714 926 253.5C926 252.285 925.634 251.099 924.949 250.094C924.265 249.09 923.293 248.315 922.161 247.869L871.543 227.972Z" fill="url(#paint0_radial_33053_3965)"/>
+<circle cx="500" cy="500" r="180" fill="#1BEF8F"/>
+<defs>
+<radialGradient id="paint0_radial_33053_3965" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(728.5 353) rotate(-52.9367) scale(207.401 206.154)">
+<stop stop-color="white"/>
+<stop offset="0.251151" stop-color="#1BEF8F"/>
+<stop offset="0.602135" stop-color="#10D7ED"/>
+<stop offset="1" stop-color="#0700FF"/>
+</radialGradient>
+</defs>
+</svg></div>
+      <div class="brand">Careelot Admin</div>
+      <div class="status"><i></i>Mất kết nối</div>
+      <h1>Không kết nối được tới khu quản trị</h1>
+      <p>Kiểm tra Wi-Fi hoặc mạng di động rồi thử lại.</p>
       <button type="button" onclick="location.reload()">Thử lại</button>
+      <p class="hint"><span class="spin"></span>Tự tải lại khi có mạng</p>
     </main>
     <script>
       // Có mạng lại thì tự tải lại, không bắt người dùng bấm.
