@@ -27,7 +27,13 @@ function LoginForm() {
     setLoading(true);
 
     try {
-      await authService.login(email, password);
+      const result = await authService.login(email, password);
+      if ("verificationRequired" in result) {
+        setError(
+          "Email chưa được xác minh. Hãy đăng nhập trên trang Careelot một lần để nhập mã xác minh rồi quay lại.",
+        );
+        return;
+      }
       // Body của /auth/login không có `role`; vai trò chỉ đọc tươi từ DB qua /auth/me.
       const user = await authService.me();
       // Không đăng xuất tài khoản thường: cookie dùng chung với app người dùng, xoá nó là đá họ ra khỏi cả bên kia.

@@ -8,7 +8,12 @@ import type { AuthResult, AuthUser } from "@/types";
  */
 export const authService = {
   login: (email: string, password: string) =>
-    api.post<AuthResult>("/auth/login", { email, password }).then((r) => r.data),
+    api
+      .post<AuthResult | { verificationRequired: true; email: string }>(
+        "/auth/login",
+        { email, password },
+      )
+      .then((r) => r.data),
 
   register: (email: string, password: string, name: string) =>
     api
