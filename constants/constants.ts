@@ -82,6 +82,17 @@ const PURPOSE_LABELS: Record<string, string> = {
   "company.brief": "Tìm hiểu công ty",
   "scrape.plan": "Lập kế hoạch quét tin",
   "scrape.run": "Quét tin tuyển dụng",
+  "scrape.nightly": "Quét tin hằng đêm",
+  "model.probe": "Kiểm tra sức khoẻ model",
+  "skill.implies": "Suy kỹ năng kéo theo",
+  "guest.cvCheck": "Chấm CV cho khách",
+  "document.bulletRewrite": "Gợi ý viết lại câu trên CV",
+  "interview.feedback": "Nhận xét câu tự trả lời",
+  "ext.upskillPlan": "Lộ trình học (tiện ích)",
+  "ext.autofillAnswer": "Soạn câu điền đơn (tiện ích)",
+  "agent.apply": "Agent ứng tuyển (bản cũ)",
+  "agent.interview": "Agent phỏng vấn (bản cũ)",
+  "agent.reviewer": "Agent rà soát (bản cũ)",
 };
 
 // Khoá lạ hiện nguyên văn thay vì bị nuốt thành ô trống.
