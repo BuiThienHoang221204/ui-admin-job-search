@@ -6,7 +6,6 @@ import { useQueryClient } from "@tanstack/react-query";
 import { apiErrorMessage } from "@/lib/axios";
 import { adminService, scraperService } from "@/services";
 import type { PortalHealth } from "@/types";
-import { WORK_STATUS } from "@/constants/constants";
 import { Sparkline } from "@/components/admin/sparkline";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -14,7 +13,7 @@ import { SectionCard } from "@/components/ui/section-card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useToast } from "@/components/ui/toast";
 import { cn, formatCount, formatDateTime, relativeTime } from "@/utils";
-import { shortError } from "./scrape-format";
+import { lastRunLabel } from "./scrape-format";
 
 const DOT = {
   PENDING: "bg-sky-500",
@@ -122,7 +121,7 @@ export function PortalHealthCard({
                         {last ? (
                           <>
                             <span className={last.status === "FAILED" ? "font-medium text-rose-700" : "text-slate-700"}>
-                              {last.status === "FAILED" ? `Hỏng · ${shortError(last.error)}` : WORK_STATUS[last.status].label}
+                              {lastRunLabel(last.status, last.error)}
                             </span>
                             <span className="text-slate-400"> · {relativeTime(last.createdAt)}</span>
                           </>
